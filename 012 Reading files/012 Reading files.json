@@ -1,0 +1,134 @@
+[
+  {
+    "id": "a862f0e91aa2bba4",
+    "type": "file in",
+    "z": "3a746519fedf1458",
+    "name": "read source file",
+    "filename": "/opt/test/source.csv",
+    "format": "lines",
+    "chunk": false,
+    "sendError": false,
+    "encoding": "none",
+    "allProps": false,
+    "x": 700,
+    "y": 1080,
+    "wires": [
+      [
+        "614f0140ba9e27ed"
+      ]
+    ]
+  },
+  {
+    "id": "06c2775c917a6281",
+    "type": "inject",
+    "z": "3a746519fedf1458",
+    "name": "init data",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 510,
+    "y": 1080,
+    "wires": [
+      [
+        "a862f0e91aa2bba4"
+      ]
+    ]
+  },
+  {
+    "id": "614f0140ba9e27ed",
+    "type": "csv",
+    "z": "3a746519fedf1458",
+    "name": "convert csv to json",
+    "sep": ",",
+    "hdrin": true,
+    "hdrout": "none",
+    "multi": "one",
+    "ret": "\\n",
+    "temp": "buffer_table,file_name,encoding",
+    "skip": "0",
+    "strings": false,
+    "include_empty_strings": false,
+    "include_null_values": false,
+    "x": 910,
+    "y": 1080,
+    "wires": [
+      [
+        "6447d6979a24bb85"
+      ]
+    ]
+  },
+  {
+    "id": "8a7e1771e65f1841",
+    "type": "debug",
+    "z": "3a746519fedf1458",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1310,
+    "y": 1080,
+    "wires": []
+  },
+  {
+    "id": "6447d6979a24bb85",
+    "type": "change",
+    "z": "3a746519fedf1458",
+    "name": "set table props",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sql.buffer_table",
+        "pt": "msg",
+        "to": "payload.buffer_table",
+        "tot": "msg",
+        "dc": true
+      },
+      {
+        "t": "set",
+        "p": "sql.file_name",
+        "pt": "msg",
+        "to": "payload.file_name",
+        "tot": "msg",
+        "dc": true
+      },
+      {
+        "t": "set",
+        "p": "sql.encoding",
+        "pt": "msg",
+        "to": "payload.encoding",
+        "tot": "msg",
+        "dc": true
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1120,
+    "y": 1080,
+    "wires": [
+      [
+        "8a7e1771e65f1841"
+      ]
+    ]
+  }
+]

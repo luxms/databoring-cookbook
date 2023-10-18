@@ -1,0 +1,133 @@
+[
+  {
+    "id": "103d58981c8925d6",
+    "type": "luxmsbi-wait",
+    "z": "ec2e738ba824d576",
+    "name": "",
+    "x": 710,
+    "y": 80,
+    "wires": [
+      [
+        "be51328caa02421b"
+      ]
+    ]
+  },
+  {
+    "id": "be51328caa02421b",
+    "type": "debug",
+    "z": "ec2e738ba824d576",
+    "name": "debug 21",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 900,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "f61a2a68e350b02c",
+    "type": "inject",
+    "z": "ec2e738ba824d576",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 280,
+    "y": 80,
+    "wires": [
+      [
+        "39fb76d0f77058ff"
+      ]
+    ]
+  },
+  {
+    "id": "eccf3586cac787a9",
+    "type": "inject",
+    "z": "ec2e738ba824d576",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 280,
+    "y": 140,
+    "wires": [
+      [
+        "6915883de683e317"
+      ]
+    ]
+  },
+  {
+    "id": "39fb76d0f77058ff",
+    "type": "luxmsbi-datagate",
+    "z": "ec2e738ba824d576",
+    "name": "SQL источник",
+    "source": "luxmsbi",
+    "chunkSize": "",
+    "sqlQuery": "select 1 as num",
+    "x": 500,
+    "y": 80,
+    "wires": [
+      [
+        "103d58981c8925d6"
+      ]
+    ]
+  },
+  {
+    "id": "6915883de683e317",
+    "type": "luxmsbi-datagate",
+    "z": "ec2e738ba824d576",
+    "name": "SQL источник",
+    "source": "my_test_koub",
+    "chunkSize": "",
+    "sqlQuery": "select 2 as num",
+    "x": 500,
+    "y": 140,
+    "wires": [
+      [
+        "1d55ec772780a987"
+      ]
+    ]
+  },
+  {
+    "id": "1d55ec772780a987",
+    "type": "junction",
+    "z": "ec2e738ba824d576",
+    "x": 600,
+    "y": 140,
+    "wires": [
+      [
+        "103d58981c8925d6"
+      ]
+    ]
+  }
+]

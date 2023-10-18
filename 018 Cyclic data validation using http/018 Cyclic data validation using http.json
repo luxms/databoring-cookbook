@@ -1,0 +1,323 @@
+[
+  {
+    "id": "0dfa35a2a9320636",
+    "type": "http in",
+    "z": "381770c450acae55",
+    "name": "check_data",
+    "url": "check",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 170,
+    "y": 240,
+    "wires": [
+      [
+        "35539e4a5d2ba8eb"
+      ]
+    ],
+    "info": "Наименование пути по http. На данном этапе нам уже необходимо каким-то образом передавать номер датасета в данный объект \n(например с помощью глобальных или потоковых переменных)"
+  },
+  {
+    "id": "35539e4a5d2ba8eb",
+    "type": "function",
+    "z": "381770c450acae55",
+    "name": "",
+    "func": "let ds = msg.payload.ds;\nmsg.payload.query = \"select json_extract_path_text(config::json, 'function_check') FROM custom.etl_matrix WHERE schema_name = '\" + ds + \"'\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 240,
+    "wires": [
+      [
+        "6eb956bb0841a512"
+      ]
+    ],
+    "info": "Функция принимает наименование датасета и внедряет его в запрос к базе.\nВ данном примере у нас уже есть созданная таблица, в которой наименование датасета соответствует запросу процедуры.\nСоответственно мы просто забираем из базы запрос к функции проверки."
+  },
+  {
+    "id": "6eb956bb0841a512",
+    "type": "luxmsbi-datagate",
+    "z": "381770c450acae55",
+    "name": "open json",
+    "source": null,
+    "chunkSize": "",
+    "sqlQuery": "",
+    "x": 540,
+    "y": 240,
+    "wires": [
+      [
+        "f5a0f017e80da77c"
+      ]
+    ],
+    "info": "Получаем запрос для функции проверки"
+  },
+  {
+    "id": "f5a0f017e80da77c",
+    "type": "switch",
+    "z": "381770c450acae55",
+    "name": "0 не 0",
+    "property": "err",
+    "propertyType": "flow",
+    "rules": [
+      {
+        "t": "nnull"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 690,
+    "y": 240,
+    "wires": [
+      [
+        "7f4a7ae1813f6ed1"
+      ],
+      [
+        "a7c35aeb84c0d412"
+      ]
+    ],
+    "info": "Создаем простейшую проверку: если функция уже запускалась, у нас будет прописан определенный ключ возврата в потоковых переменных, если нет = запускаем процедуру с ключом старта."
+  },
+  {
+    "id": "8ce5ee175aead9e8",
+    "type": "luxmsbi-datagate",
+    "z": "381770c450acae55",
+    "name": "open json",
+    "source": null,
+    "chunkSize": "",
+    "sqlQuery": "",
+    "x": 1000,
+    "y": 200,
+    "wires": [
+      [
+        "84ecbb1f2451d4e3"
+      ]
+    ],
+    "info": "Запуск запроса"
+  },
+  {
+    "id": "57d4a9fd663c7c35",
+    "type": "luxmsbi-datagate",
+    "z": "381770c450acae55",
+    "name": "open json",
+    "source": null,
+    "chunkSize": "",
+    "sqlQuery": "Запуск запроса",
+    "x": 1000,
+    "y": 280,
+    "wires": [
+      [
+        "84ecbb1f2451d4e3"
+      ]
+    ]
+  },
+  {
+    "id": "a7c35aeb84c0d412",
+    "type": "function",
+    "z": "381770c450acae55",
+    "name": "",
+    "func": "let func = msg.payload.json_extract_path_text;\nmsg.payload.query = \"SELECT \" + func + \"(0)\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 840,
+    "y": 280,
+    "wires": [
+      [
+        "57d4a9fd663c7c35"
+      ]
+    ],
+    "info": "Запускаем процедуру с начальным ключом"
+  },
+  {
+    "id": "7f4a7ae1813f6ed1",
+    "type": "function",
+    "z": "381770c450acae55",
+    "name": "",
+    "func": "let err = flow.get(\"err\");\nlet func = msg.payload.json_extract_path_text;\nmsg.payload.query = \"SELECT \" + func + \"(\" + err + \")\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 840,
+    "y": 200,
+    "wires": [
+      [
+        "8ce5ee175aead9e8"
+      ]
+    ],
+    "info": "Запускаем процедуру проверки с какого-то ключа (соответствующего этапа)"
+  },
+  {
+    "id": "79ae4e72cf1d22a5",
+    "type": "switch",
+    "z": "381770c450acae55",
+    "name": "200 не 200",
+    "property": "err",
+    "propertyType": "flow",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "200",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 1350,
+    "y": 240,
+    "wires": [
+      [
+        "fbea8a33a6892d1b"
+      ],
+      [
+        "fb98eb015c831a48"
+      ]
+    ],
+    "info": "Если ключ 200 (ОК) = возвращаем страницу с окончанием проверок\nИначе возвращаем страницу с ошибкой и описанием"
+  },
+  {
+    "id": "f64e23813870a543",
+    "type": "http response",
+    "z": "381770c450acae55",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1930,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "84ecbb1f2451d4e3",
+    "type": "function",
+    "z": "381770c450acae55",
+    "name": "",
+    "func": "let err_tmp = msg.payload.check_new_data.f1;\nflow.set(\"err\", err_tmp);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1180,
+    "y": 240,
+    "wires": [
+      [
+        "79ae4e72cf1d22a5"
+      ]
+    ],
+    "info": "Заносим ключ возврата в потоковые переменные"
+  },
+  {
+    "id": "fbea8a33a6892d1b",
+    "type": "function",
+    "z": "381770c450acae55",
+    "name": "",
+    "func": "flow.set(\"err\", undefined);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1520,
+    "y": 200,
+    "wires": [
+      [
+        "4dcb8429cb7a6a83"
+      ]
+    ],
+    "info": "Если пришло 200 - очищаем потоковую переменную, чтобы при следующем запуске начать сначала"
+  },
+  {
+    "id": "2eb53447da4836c4",
+    "type": "template",
+    "z": "381770c450acae55",
+    "name": "",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "<!DOCTYPE html>\n<html>\n       <head>\n     <title>Проверки пройдены</title>   \n    <style>\n{{{css}}}\n</style>\n   </head>\n   <body>\n       <div>\n           <text-info>\n               \n\n      <p>Проверки пройдены успешно</p> <hr>\n                 </text-info>\n      </div>\n      \n       <copyright>\n      <a class=\"fusion-no-lightbox\" href=\"https://luxmsbi.com/\" target=\"_self\"><img src=\"https://luxmsbi.com/wp-content/uploads/2020/12/LogoBI_colour_2-e1617718587530.png\" data-orig-src=\"https://luxmsbi.com/wp-content/uploads/2020/12/LogoBI_colour_2-e1617718587530.png\" class=\"img-responsive wp-image-4839 lazyloaded\" width=\"256\" height=\"45\"></a>\n  </a>\n</copyright>\n\n   </body>\n</html>",
+    "output": "str",
+    "x": 1780,
+    "y": 200,
+    "wires": [
+      [
+        "f64e23813870a543"
+      ]
+    ],
+    "info": "Страница с успешным окончанием проверок"
+  },
+  {
+    "id": "4dcb8429cb7a6a83",
+    "type": "template",
+    "z": "381770c450acae55",
+    "name": "css",
+    "field": "css",
+    "fieldType": "msg",
+    "format": "css",
+    "syntax": "mustache",
+    "template": "div {\nheight: 200px;\nposition: absolute;\nwidth: 480px;\nheight: 200px;\ntop: 40%;\nleft: 40%;\n\n/* background dash */\n\nbackground: #FFFFFF;\nbox-shadow: 0px 10px 20px rgba(79, 79, 155, 0.05), 0px 2px 6px rgba(79, 79, 155, 0.05), 0px 0px 1px rgba(79, 79, 155, 0.05);\nborder-radius: 8px;\n\n}\n\np {\n    font-family: Roboto, Arial;\n    text-align:  center;\n    font-size: large;\n} \ntext-info{\nposition: absolute;\nwidth: 438px;\nheight: 225px;\ntop: 5%;\nleft: 5%;\n}\n\n\nbody{\n    background-color: #F2F2F8;\n   }\n\n/* CSS */\n.button-y {\n  background-color: #5FB138;\n  border-radius: 8px;\n  border-style: none;\n  box-sizing: border-box;\n  color: #FFFFFF;\n  cursor: pointer;\n  display: inline-block;\n  font-family: Roboto, Arial;\n  font-size: 16px;\n  font-weight: 600;\n  width: 306px;\n  height: 48px;\n  line-height: 20px;\n  list-style: none;\n  margin: 0;\n  outline: none;\n  padding: 14px 16px;\n  position: relative;\n  text-align: center;\n  text-decoration: none;\n  transition: color 100ms;\n  vertical-align: baseline;\n  user-select: none;\n  position: absolute;\n  top: 40%;\n  left: 15%;\n  -webkit-user-select: none;\n  touch-action: manipulation;\n}\n\n.button-y:hover {\n    opacity: 0.7;\n},\n.button-y:focus {\n  background-color: #F082AC;\n}\n\n.button:active {\n  background: #007a63;\n}\n\n.button__text {\n  color: #ffffff;\n  transition: all 0.2s;\n}\n\n.button--loading .button__text {\n  visibility: hidden;\n  opacity: 0;\n}\n\n.button--loading::after {\n  content: \"\";\n  position: absolute;\n  width: 16px;\n  height: 16px;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  margin: auto;\n  border: 4px solid transparent;\n  border-top-color: #ffffff;\n  border-radius: 50%;\n  animation: button-loading-spinner 1s ease infinite;\n}\n\n@keyframes button-loading-spinner {\n  from {\n    transform: rotate(0turn);\n  }\n\n  to {\n    transform: rotate(1turn);\n  }\n}\n\ncopyright {\n  display:block;\n  margin-top: 100px;\n  text-align: center;\n  font-family: Helvetica, Arial, sans-serif;\n  font-size: 12px;\n  font-weight: bold;\n  text-transform: uppercase;\n  position: absolute;\n  top: 80%;\n  left: 44%;\n}\ncopyright a{\n  text-decoration: none;\n  color: #EE4E44;\n}",
+    "output": "str",
+    "x": 1650,
+    "y": 200,
+    "wires": [
+      [
+        "2eb53447da4836c4"
+      ]
+    ],
+    "info": "Какой-то css"
+  },
+  {
+    "id": "9bcd09b04331525f",
+    "type": "template",
+    "z": "381770c450acae55",
+    "name": "Caution",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "<!DOCTYPE html>\n<html>\n       <head>\n     <title>Вгрузка отменена</title>   \n    <style>\n{{{css}}}\n</style>\n   </head>\n   <body>\n       <div>\n           <text-info>\n      <p>Ошибка:</p>\n                <whats-new>\n                {{payload.check_new_data.f2}} \n                </whats-new>\n                </text-info>\n                <text-low>\n      <p>Продолжить?</p>\n      <a href=\"/databoring/check?ds={{payload.ds}}\" class=\"button-y\">Продолжить</a>\n      <a href=\"/databoring/stop\" class=\"button-n\">Остановить</a>  \n                </text-low>\n\n      \n       <copyright>\n      <a class=\"fusion-no-lightbox\" href=\"https://luxmsbi.com/\" target=\"_self\"><img src=\"https://luxmsbi.com/wp-content/uploads/2020/12/LogoBI_colour_2-e1617718587530.png\" data-orig-src=\"https://luxmsbi.com/wp-content/uploads/2020/12/LogoBI_colour_2-e1617718587530.png\" class=\"img-responsive wp-image-4839 lazyloaded\" width=\"256\" height=\"45\"></a>\n  </a>\n</copyright>\n      </div>\n   </body>\n</html>",
+    "output": "str",
+    "x": 1720,
+    "y": 260,
+    "wires": [
+      [
+        "f64e23813870a543"
+      ]
+    ],
+    "info": "Страница с выводом ошибки"
+  },
+  {
+    "id": "fb98eb015c831a48",
+    "type": "template",
+    "z": "381770c450acae55",
+    "name": "css",
+    "field": "css",
+    "fieldType": "msg",
+    "format": "css",
+    "syntax": "mustache",
+    "template": "div {\nheight: 200px;\nposition: absolute;\nwidth: 492px;\nheight: 560px;\ntop: 30%;\nleft: 40%;\n\n/* background dash */\n\nbackground: #FFFFFF;\nbox-shadow: 0px 10px 20px rgba(79, 79, 155, 0.05), 0px 2px 6px rgba(79, 79, 155, 0.05), 0px 0px 1px rgba(79, 79, 155, 0.05);\nborder-radius: 8px;\n\n    }\np{\n    font-family: Roboto, Arial\n}\n    \ntext-info{\nposition: absolute;\nwidth: 438px;\nheight: 300px;\ntop: 2%;\nleft: 5%;\n}\n\ntext-low{\nposition: absolute;\nleft: 5%;\nbottom: 5%;\n\n}\n\nwhats-new{\n    position: absolute;\nwidth: 444px;\nheight: 320px;\ntop: 20%;\noverflow: auto;\n\n/* background dash */\n\nbackground: #FFFFFF;\n/* main colour opacity */\n\nborder: 1px solid rgba(151, 151, 196, 0.1);\nbox-sizing: border-box;\nbox-shadow: 0px 10px 20px rgba(79, 79, 155, 0.05), 0px 2px 6px rgba(79, 79, 155, 0.05), 0px 0px 1px rgba(79, 79, 155, 0.05);\nborder-radius: 8px;\n}\n\nbody{\n    background-color: #F2F2F8;\n   }\n\n/* CSS */\n.button-y {\n  background-color: #5FB138;\n  border-radius: 8px;\n  border-style: none;\n  box-sizing: border-box;\n  color: #FFFFFF;\n  cursor: pointer;\n  display: inline-block;\n  font-family: Roboto, Arial;\n  font-size: 16px;\n  font-weight: 600;\n  width: 216px;\n  height: 48px;\n  line-height: 20px;\n  list-style: none;\n  margin: 0;\n  outline: none;\n  padding: 14px 16px;\n  position: relative;\n  text-align: center;\n  text-decoration: none;\n  transition: color 100ms;\n  vertical-align: baseline;\n  user-select: none;\n  -webkit-user-select: none;\n  touch-action: manipulation;\n}\n\n.button-y:hover {\n    opacity: 0.7;\n},\n.button-y:focus {\n  background-color: #F082AC;\n}\n\n.button-n {\n  background-color: #EA4C89;\n  border-radius: 8px;\n  border-style: none;\n  box-sizing: border-box;\n  color: #FFFFFF;\n  cursor: pointer;\n  display: inline-block;\n  font-family: Roboto, Arial;\n  font-size: 16px;\n  font-weight: 600;\n  width: 216px;\n  height: 48px;\n  line-height: 20px;\n  list-style: none;\n  margin: 0;\n  outline: none;\n  padding: 14px 16px;\n  position: relative;\n  text-align: center;\n  text-decoration: none;\n  transition: color 100ms;\n  vertical-align: baseline;\n  user-select: none;\n  -webkit-user-select: none;\n  touch-action: manipulation;\n}\n\n.button-n:hover {\n    opacity: 0.7;\n},\n.button-n:focus {\n  background-color: #F082AC;\n}\ncopyright {\n  display:block;\n  margin-top: 100px;\n  text-align: center;\n  font-family: Helvetica, Arial, sans-serif;\n  font-size: 12px;\n  font-weight: bold;\n  text-transform: uppercase;\n  position: absolute;\n  top: 120%;\n  left: 22%;\n}\ncopyright a{\n  text-decoration: none;\n  color: #EE4E44;\n}",
+    "output": "str",
+    "x": 1570,
+    "y": 260,
+    "wires": [
+      [
+        "9bcd09b04331525f"
+      ]
+    ],
+    "info": "CSS"
+  }
+]

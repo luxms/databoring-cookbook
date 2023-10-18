@@ -1,0 +1,74 @@
+[
+  {
+    "id": "290255d2a4b25830",
+    "type": "inject",
+    "z": "c8601fec211e98b5",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 720,
+    "y": 200,
+    "wires": [
+      [
+        "4bef2c2673b61199"
+      ]
+    ]
+  },
+  {
+    "id": "4bef2c2673b61199",
+    "type": "luxmsbi-import-data",
+    "z": "c8601fec211e98b5",
+    "name": "Импорт файлов",
+    "paramsFromFlow": false,
+    "fileType": "xls",
+    "destinationIdent": "luxmsbi",
+    "dataSourceFilePath": "/tmp/Data.xlsx",
+    "headerRow": "1",
+    "firstDataRow": "2",
+    "sheetNumbers": "",
+    "schemaName": "custom_2",
+    "tableName": "",
+    "mode": "drop",
+    "tryToCast": true,
+    "dropFileOnComplete": false,
+    "csvWithNames": true,
+    "csvDelimiter": "comma",
+    "x": 950,
+    "y": 200,
+    "wires": [
+      [
+        "2d51e0e1d6b78f05"
+      ]
+    ]
+  },
+  {
+    "id": "2d51e0e1d6b78f05",
+    "type": "debug",
+    "z": "c8601fec211e98b5",
+    "name": "debug 1",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1160,
+    "y": 200,
+    "wires": []
+  }
+]

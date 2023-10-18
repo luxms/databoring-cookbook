@@ -1,0 +1,561 @@
+[
+    {
+        "id": "07c8b5aea7060a7f",
+        "type": "tab",
+        "label": "Мониторинг потоков",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fe239aada4932f58",
+        "type": "redis-in",
+        "z": "07c8b5aea7060a7f",
+        "server": "02cff7402dc610aa",
+        "command": "psubscribe",
+        "name": "__keyspace@0__:* Subscriber ",
+        "topic": "__keyspace@0__:*",
+        "obj": true,
+        "timeout": 0,
+        "x": 145,
+        "y": 300,
+        "wires": [
+            [
+                "12678970decffa70",
+                "f953c6342eb91186"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "713f762705406d4e",
+        "type": "debug",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "12678970decffa70",
+        "type": "switch",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "expired",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "x": 195,
+        "y": 300,
+        "wires": [
+            [
+                "72c1a36cf7186381"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "d7f7619d8d77b752",
+        "type": "comment",
+        "z": "07c8b5aea7060a7f",
+        "name": "Глобальный поток для отслеживания ЗАМИРАНИЯ всех потоков! Не важно, где располагается!",
+        "info": "",
+        "x": 470,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "ce55e1b84fa2911f",
+        "type": "inject",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 06 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 135,
+        "y": 180,
+        "wires": [
+            [
+                "0a75fa5c8eab6b97"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "0a75fa5c8eab6b97",
+        "type": "function",
+        "z": "07c8b5aea7060a7f",
+        "name": "keyDb connection parametres",
+        "func": "// Работа с keyDB\nglobal.set('con_config_h', '127.0.0.1'); //конфиг подключения к KeyDB хост\nglobal.set('con_config_p', 6379); //конфиг подключения к KeyDB порт\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "redis",
+                "module": "ioredis"
+            }
+        ],
+        "x": 320,
+        "y": 180,
+        "wires": [
+            [
+                "61ad88e654f940cc"
+            ]
+        ]
+    },
+    {
+        "id": "61ad88e654f940cc",
+        "type": "debug",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "469ee63ad73537de",
+        "type": "comment",
+        "z": "07c8b5aea7060a7f",
+        "name": "Глобальный поток c конфигурацией для keydb. Запускаем 1 раз!",
+        "info": "",
+        "x": 350,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "72c1a36cf7186381",
+        "type": "function",
+        "z": "07c8b5aea7060a7f",
+        "name": "LOSE msg",
+        "func": "// Работа с keyDB\nlet con_config_h = global.get('con_config_h'); //конфиг подключения к KeyDB хост\nlet con_config_p = global.get('con_config_p'); //конфиг подключения к KeyDB порт\nconst red = new redis(con_config_p, con_config_h); //подключение к нужному хосту и порту\n\nlet key = msg.topic.replace('__keyspace@0__:', '');\nlet store_key = 'store:' + key; //ключ для хранилища всех ключей и значений\n\nlet info = await red.get(store_key);\n\nmsg.msg = 'Поток долго выполняется. ИНФО: ' + info;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "redis",
+                "module": "ioredis"
+            }
+        ],
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "713f762705406d4e"
+            ]
+        ]
+    },
+    {
+        "id": "e8e89f458f9396a3",
+        "type": "inject",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 135,
+        "y": 140,
+        "wires": [
+            [
+                "e7897758ff3d994e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "e7897758ff3d994e",
+        "type": "luxmsbi-run-sql",
+        "z": "07c8b5aea7060a7f",
+        "name": "Развёртывание функции и вьюхи",
+        "retryCount": 1,
+        "retryDelay": 5000,
+        "dataSource": "myself_lamel",
+        "errorToPayload": false,
+        "query": "--вью для вычисления статистики времени выполнения потоков\nCREATE OR REPLACE VIEW public.mat_stat_upload_log_sdc AS \nWITH diff AS (\n\tSELECT pipe_name, \n\tEXTRACT(EPOCH FROM end_time) - EXTRACT(EPOCH FROM start_time) diff\n\tFROM public.upload_log_sdc uls \n\tWHERE pipeline_success = 'true'\n)\n,\npercentile_value AS (\nSELECT pipe_name,\npercentile_disc(0.25) WITHIN GROUP (ORDER BY diff) perc_25, \npercentile_disc(0.75) WITHIN GROUP (ORDER BY diff) perc_75\nFROM diff\nGROUP BY pipe_name\n)\nSELECT DISTINCT pipe_name, floor(avg(diff) OVER (PARTITION BY diff.pipe_name))::int avg_v, \nceil(sqrt(var_pop(diff) OVER (PARTITION BY diff.pipe_name)))::int sigma\nFROM diff\nLEFT JOIN percentile_value USING (pipe_name)\nWHERE diff BETWEEN perc_25 AND perc_75\nUNION \nSELECT 'Мониторинг потоков', 8, 1\nUNION \nSELECT 'Lamel', 8, 1\n;\n\nCOMMENT ON VIEW public.mat_stat_upload_log_sdc IS 'Представление с расчётами для каждого потока среднего значения выполнения потока с учётом выбросов, а также областей: одна-две-три сигма от этого среднего';\n\n--Функция, которая будет возвращать границы одной-двух-трёх сигм при получении наименования потока\n\nCREATE OR REPLACE FUNCTION public.get_all_sigma_from_flow(flow_name TEXT, multiplier double precision) \nRETURNS TABLE (sigma int)\nAS $$\nBEGIN \n\tIF flow_name IN (\n\t\t\t\t\tSELECT pipe_name \n\t\t\t\t\tFROM public.mat_stat_upload_log_sdc\t\n\t\t\t\t\t) \n\t\t\t\t\tTHEN \n\t\t\t\t\t\tRETURN QUERY EXECUTE 'SELECT abs(avg_v+sigma*floor($1))::int\n\t\t\t\t\t\t\t\tFROM public.mat_stat_upload_log_sdc\n\t\t\t\t\t\t\t\twhere pipe_name = $2' USING multiplier, flow_name;\n\t\t\t\t\tELSE \n\t\t\t\t\t\tRAISE EXCEPTION 'Flow name Error : %', flow_name;\n\tEND IF;\t\t\t\t\t\t\nEND;\n$$\nLANGUAGE plpgsql;\n\nCOMMENT ON FUNCTION public.get_all_sigma_from_flow(text, double precision) IS 'Функция, которая будет возвращать значение в зависимости от множителя для сигмы и получении наименования потока';",
+        "x": 330,
+        "y": 140,
+        "wires": [
+            [
+                "61ad88e654f940cc"
+            ]
+        ]
+    },
+    {
+        "id": "45347702bcc70207",
+        "type": "inject",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 745,
+        "y": 140,
+        "wires": [
+            [
+                "1bd278f016b08a3d"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "1bd278f016b08a3d",
+        "type": "luxmsbi-run-sql",
+        "z": "07c8b5aea7060a7f",
+        "name": "Удаление функции и вьюхи",
+        "retryCount": 1,
+        "retryDelay": 5000,
+        "dataSource": "myself_lamel",
+        "errorToPayload": false,
+        "query": "--вью для вычисления статистики времени выполнения потоков\nDROP VIEW IF exists public.mat_stat_upload_log_sdc;\n\n--Функция, которая будет возвращать границы одной-двух-трёх сигм при получении наименования потока\nDROP FUNCTION if EXISTS public.get_all_sigma_from_flow;",
+        "x": 920,
+        "y": 140,
+        "wires": [
+            [
+                "61ad88e654f940cc"
+            ]
+        ]
+    },
+    {
+        "id": "f953c6342eb91186",
+        "type": "debug",
+        "z": "07c8b5aea7060a7f",
+        "name": "debug 925",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 270,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "4d98bceee4db7804",
+        "type": "http request",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://bi-et.luxmsbi.com/databoring/processes_status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 185,
+        "y": 620,
+        "wires": [
+            [
+                "54253aa6728097db"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "804976ecfbc9f0e6",
+        "type": "inject",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 820,
+        "wires": [
+            [
+                "4805e09c6da58970"
+            ]
+        ]
+    },
+    {
+        "id": "4805e09c6da58970",
+        "type": "delay",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "12",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 430,
+        "y": 820,
+        "wires": [
+            [
+                "4230f13eb358c4c5"
+            ]
+        ]
+    },
+    {
+        "id": "93555af9cc681fba",
+        "type": "debug",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "2a075194de633a0d",
+        "type": "complete",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "scope": [
+            "804976ecfbc9f0e6"
+        ],
+        "uncaught": false,
+        "x": 135,
+        "y": 620,
+        "wires": [
+            [
+                "4d98bceee4db7804"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "4230f13eb358c4c5",
+        "type": "delay",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "0",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 620,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dd6e7825168296ee",
+        "type": "complete",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "scope": [
+            "4230f13eb358c4c5"
+        ],
+        "uncaught": false,
+        "x": 135,
+        "y": 680,
+        "wires": [
+            [
+                "556f0eb6397cb8df"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "556f0eb6397cb8df",
+        "type": "function",
+        "z": "07c8b5aea7060a7f",
+        "name": "Forming key for KeyDB command PERSIST",
+        "func": "let flow_key = flow.get('flow_key');// использование потоковой переменной ключ\n\n// Работа с keyDB\nlet con_config_h = global.get('con_config_h'); //конфиг подключения к KeyDB хост\nlet con_config_p = global.get('con_config_p'); //конфиг подключения к KeyDB порт\nconst red = new redis(con_config_p, con_config_h); //подключение к нужному хосту и порту\n\nmsg.persist = await red.persist(flow_key); // устанавливаем ключ значение для текущего потока\n\nlet store_key = 'store:' + flow_key; //ключ для хранилища всех ключей и значений\nlet get_value = await red.get(store_key);\n\n//message для информации\nmsg.msg = 'Поток выполнился. ИНФО: ' + get_value;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "redis",
+                "module": "ioredis"
+            }
+        ],
+        "x": 350,
+        "y": 680,
+        "wires": [
+            [
+                "93555af9cc681fba"
+            ]
+        ]
+    },
+    {
+        "id": "f128db161ad50c19",
+        "type": "comment",
+        "z": "07c8b5aea7060a7f",
+        "name": "Потоки для каждого flow",
+        "info": "",
+        "x": 230,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "b9c4445635418861",
+        "type": "function",
+        "z": "07c8b5aea7060a7f",
+        "name": "Forming value for key to KeyDB",
+        "func": "let time = msg.payload.sigma; // среднее время выполнения потока\nmsg.dt_start = new Date().toISOString();\nlet title = env.get('NR_FLOW_ID'); //идентификатор flow\nlet name = env.get('NR_FLOW_NAME'); // наименование потока\nlet sys_user = env.get('USER'); // пользователь системный\n\n// формирование JSON с информацией о потоке\nlet info = '{' + '\"flow_id\":' + '\"' + title + '\"' + ',' + '\"flow_name\":' + '\"' + name + '\"' + ',' + '\"sys_user_name\":' + '\"' + sys_user + '\"' + ',' + '\"user_name\":' + '\"' + msg.user + '\"' + ',' + '\"dt_start\":' + '\"' + msg.dt_start + '\"' + '}'; \n\n//На вход в keyDB выполнение скрипта - команда\nlet run_fvalue = JSON.parse(info);\n\n// ключ - значение для keyDB\nlet run_key = msg.user + title; \nlet run_value = '\\'' + info + '\\'';\n\nflow.set('flow_key', run_key); // потоковая переменная ключ потока\n\n\n// Работа с keyDB\nlet con_config_h = global.get('con_config_h'); //конфиг подключения к KeyDB хост\nlet con_config_p = global.get('con_config_p'); //конфиг подключения к KeyDB порт\n\nlet store_key = 'store:' + run_key; //ключ для хранилища всех ключей и значений\nconst red = new redis(con_config_p, con_config_h); //подключение к нужному хосту и порту\n\nred.set(run_key, run_value); // устанавливаем ключ значение для текущего потока\nred.set(store_key, run_value); // устанавливаем ключ значение для текущего потока\nred.expire(run_key, time); // ставим установленному ключу для потока время жизни\n\nmsg.payload = await red.get(run_key);\n// msg.store_key = await red.get(store_key);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "redis",
+                "module": "ioredis"
+            }
+        ],
+        "x": 700,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "54253aa6728097db",
+        "type": "function",
+        "z": "07c8b5aea7060a7f",
+        "name": "FLOW_NAME",
+        "func": "msg.name = env.get('NR_FLOW_NAME'); // наименование потока\n\nmsg.user = JSON.parse(msg.payload)[0]['username']; // пользователь из датаборинга\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "redis",
+                "module": "ioredis"
+            }
+        ],
+        "x": 310,
+        "y": 620,
+        "wires": [
+            [
+                "23cc588ab815cce6"
+            ]
+        ]
+    },
+    {
+        "id": "23cc588ab815cce6",
+        "type": "luxmsbi-datagate",
+        "z": "07c8b5aea7060a7f",
+        "name": "",
+        "source": "myself_lamel",
+        "chunkSize": "",
+        "sqlQuery": "SELECT * FROM public.get_all_sigma_from_flow('${msg.name}', 6)",
+        "x": 480,
+        "y": 620,
+        "wires": [
+            [
+                "b9c4445635418861"
+            ]
+        ],
+        "info": "В функции указываем имя потока, автоматически в ходе etl заносится первым аргументом\nВторой аргумент выбирается - количество сигм для допустимости отклонения от среднего значения выполнения потока, \nВНИМАНИЕ ПИШЕТСЯ РУКАМИ!!!"
+    },
+    {
+        "id": "02cff7402dc610aa",
+        "type": "redis-config",
+        "name": "Local_events",
+        "options": "{\"host\": \"127.0.0.1\", \"port\": 6379}",
+        "cluster": false,
+        "optionsType": "json"
+    }
+]

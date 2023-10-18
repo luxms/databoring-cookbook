@@ -1,0 +1,329 @@
+[
+  {
+    "id": "edaa4867e9232fb5",
+    "type": "watch",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "files": "/tmp",
+    "recursive": "",
+    "x": 130,
+    "y": 200,
+    "wires": [
+      [
+        "a1c0a3413d359be5"
+      ]
+    ]
+  },
+  {
+    "id": "faedb4aedfe50d79",
+    "type": "change",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "rules": [
+      {
+        "p": "arrayd",
+        "t": "set",
+        "pt": "msg",
+        "to": "arr",
+        "tot": "flow"
+      },
+      {
+        "p": "arr",
+        "t": "set",
+        "pt": "flow",
+        "to": "$append(msg.arrayd, [msg.payload])\t",
+        "tot": "jsonata"
+      },
+      {
+        "p": "payload",
+        "t": "set",
+        "pt": "msg",
+        "to": "arr",
+        "tot": "flow"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 500,
+    "y": 200,
+    "wires": [
+      [
+        "5bc3693641c82e65"
+      ]
+    ]
+  },
+  {
+    "id": "caa7079c4d828280",
+    "type": "debug",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 790,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "a1c0a3413d359be5",
+    "type": "switch",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "cont",
+        "v": ".xlsx",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 290,
+    "y": 200,
+    "wires": [
+      [
+        "faedb4aedfe50d79"
+      ]
+    ]
+  },
+  {
+    "id": "5bc3693641c82e65",
+    "type": "loop",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "kind": "enum",
+    "count": "",
+    "initial": "",
+    "step": "",
+    "condition": "",
+    "conditionType": "js",
+    "when": "before",
+    "enumeration": "payload",
+    "enumerationType": "msg",
+    "limit": "",
+    "loopPayload": "loop-index",
+    "finalPayload": "final-orig",
+    "x": 655,
+    "y": 200,
+    "wires": [
+      [
+        "caa7079c4d828280"
+      ],
+      [
+        "a3dc7a1b5bbec610"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "a3dc7a1b5bbec610",
+    "type": "change",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "$type(msg.loop.key) != \"undefined\" ? msg.loop.value != '' ?\tmsg.loop.key & \": \" & msg.loop.value :\tmsg.loop.value",
+        "tot": "jsonata"
+      },
+      {
+        "t": "set",
+        "p": "destinationIdent",
+        "pt": "msg",
+        "to": "luxmsbi",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "shemaName",
+        "pt": "msg",
+        "to": "custom",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "tableName",
+        "pt": "msg",
+        "to": "$replace($replace(msg.loop.value, '/tmp/', ''), '.xlsx', '')\t",
+        "tot": "jsonata"
+      },
+      {
+        "t": "set",
+        "p": "sheetNumber",
+        "pt": "msg",
+        "to": "1",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "dataSourceFilePath",
+        "pt": "msg",
+        "to": "msg.loop.value",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 385,
+    "y": 300,
+    "wires": [
+      [
+        "f8c6f57fad1c8b9c"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "f8c6f57fad1c8b9c",
+    "type": "function",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "func": "const excel = global.get('EXCEL');\nconst workbook = new excel.Workbook();\n\nasync function readExcel(filePath, sheetName) {\n  await workbook.xlsx.readFile(filePath);\n  const worksheet = workbook.getWorksheet(sheetName);\n\n  let headerName = [];\n  let headerRow = 0;\n\n  worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {\n    let readRow = [];\n\n    row.eachCell({ includeEmpty: true }, function (cell) {\n      readRow.push(cell.value);\n    });\n\n    if (readRow.every(value => typeof value === 'string')) {\n      headerName.push(readRow);\n      headerRow = rowNumber;\n    }\n  });\n\n  return {\n    headerRow,\n    firstDataRow: headerRow + 1,\n  };\n}\n\nconst data = readExcel(msg.dataSourceFilePath, msg.sheetName);\nmsg.headerRow = data.headerRow;\nmsg.firstDataRow = data.firstDataRow;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 455,
+    "y": 300,
+    "wires": [
+      [
+        "0966614525f886cd"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "0966614525f886cd",
+    "type": "luxmsbi-import-data",
+    "z": "76e7c1fb4648a1eb",
+    "name": "Импорт файлов",
+    "paramsFromFlow": true,
+    "fileType": "xls",
+    "destinationIdent": " ",
+    "dataSourceFilePath": " ",
+    "headerRow": "",
+    "firstDataRow": "",
+    "sheetNumbers": "",
+    "schemaName": "",
+    "tableName": "",
+    "mode": "drop",
+    "tryToCast": true,
+    "dropFileOnComplete": false,
+    "csvWithNames": true,
+    "csvDelimiter": "comma",
+    "x": 610,
+    "y": 300,
+    "wires": [
+      [
+        "d145ad7570b8be96",
+        "d7716f23a589ea06"
+      ]
+    ]
+  },
+  {
+    "id": "d7716f23a589ea06",
+    "type": "function",
+    "z": "76e7c1fb4648a1eb",
+    "name": "function 2",
+    "func": "var array = flow.get('arr');\nvar newArray = array.filter((value) => value != msg.filename);\nflow.set('arr', newArray)\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 785,
+    "y": 300,
+    "wires": [
+      [
+        "5bc3693641c82e65"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "d145ad7570b8be96",
+    "type": "debug",
+    "z": "76e7c1fb4648a1eb",
+    "name": "debug 63",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 840,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "20361ba98101ce07",
+    "type": "catch",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "scope": [
+      "0966614525f886cd"
+    ],
+    "uncaught": false,
+    "x": 140,
+    "y": 120,
+    "wires": [
+      [
+        "35bcc69eab0e065f"
+      ]
+    ]
+  },
+  {
+    "id": "35bcc69eab0e065f",
+    "type": "function",
+    "z": "76e7c1fb4648a1eb",
+    "name": "clear arr",
+    "func": "var array = flow.get('arr');\nvar newArray = array.filter((value) => value != msg.filename);\nflow.set('arr', newArray)\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 120,
+    "wires": [
+      [
+        "1de84353c116d31f"
+      ]
+    ]
+  },
+  {
+    "id": "1de84353c116d31f",
+    "type": "debug",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 450,
+    "y": 120,
+    "wires": []
+  }
+]

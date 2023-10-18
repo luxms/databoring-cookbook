@@ -1,0 +1,419 @@
+[
+  {
+    "id": "78f08d511947893d",
+    "type": "inject",
+    "z": "0f14a080e4873ed4",
+    "name": "Object",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"first\":\"Hello World\",\"second\":8,\"third\":true}",
+    "payloadType": "json",
+    "x": 270,
+    "y": 1240,
+    "wires": [
+      [
+        "a294079411bce064"
+      ]
+    ]
+  },
+  {
+    "id": "bf2fe5d9efd86fac",
+    "type": "loop",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "kind": "enum",
+    "count": "",
+    "initial": "",
+    "step": "",
+    "condition": "",
+    "conditionType": "js",
+    "when": "before",
+    "enumeration": "payload",
+    "enumerationType": "msg",
+    "limit": "",
+    "loopPayload": "loop-index",
+    "finalPayload": "final-orig",
+    "x": 620,
+    "y": 1320,
+    "wires": [
+      [
+        "6b0d635654f34538"
+      ],
+      [
+        "810bcf360554897c"
+      ]
+    ]
+  },
+  {
+    "id": "6b0d635654f34538",
+    "type": "debug",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "loop",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 830,
+    "y": 1300,
+    "wires": []
+  },
+  {
+    "id": "74f8f5749683bf93",
+    "type": "change",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "$type(msg.loop.key) != \"undefined\" ?\tmsg.loop.key & \": \" & msg.loop.value :\tmsg.loop.value",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 630,
+    "y": 1420,
+    "wires": [
+      [
+        "6dcfcfe11931464c",
+        "bf2fe5d9efd86fac"
+      ]
+    ]
+  },
+  {
+    "id": "86faba0ef5662d8d",
+    "type": "inject",
+    "z": "0f14a080e4873ed4",
+    "name": "Array",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "[6,14,36,-8,100]",
+    "payloadType": "json",
+    "x": 270,
+    "y": 1280,
+    "wires": [
+      [
+        "6f0ac3a95b7f1eac"
+      ]
+    ]
+  },
+  {
+    "id": "ea08312a05f385a2",
+    "type": "function",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "func": "msg.payload = Int16Array.from(msg.payload);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 405,
+    "y": 1320,
+    "wires": [
+      [
+        "bf2fe5d9efd86fac"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "19a991ae83992ca4",
+    "type": "function",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "func": "msg.payload = new Map(Object.entries(msg.payload));\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 365,
+    "y": 1400,
+    "wires": [
+      [
+        "f0b52f88377ae5f8"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "e0445224bca59839",
+    "type": "function",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "func": "msg.payload = new Set(msg.payload);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 365,
+    "y": 1440,
+    "wires": [
+      [
+        "90015d5f9e0f18b6"
+      ]
+    ],
+    "l": false
+  },
+  {
+    "id": "ae266bc899871ebc",
+    "type": "inject",
+    "z": "0f14a080e4873ed4",
+    "name": "String",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "Hello World!",
+    "payloadType": "str",
+    "x": 270,
+    "y": 1360,
+    "wires": [
+      [
+        "bf2fe5d9efd86fac"
+      ]
+    ]
+  },
+  {
+    "id": "6dcfcfe11931464c",
+    "type": "debug",
+    "z": "0f14a080e4873ed4",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 850,
+    "y": 1420,
+    "wires": []
+  },
+  {
+    "id": "bdc2fc21c8f07999",
+    "type": "inject",
+    "z": "0f14a080e4873ed4",
+    "name": "Typed Array",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "[-9,10,-5,1,0,1000]",
+    "payloadType": "json",
+    "x": 290,
+    "y": 1320,
+    "wires": [
+      [
+        "ea08312a05f385a2"
+      ]
+    ]
+  },
+  {
+    "id": "d89e91d8a518b8ed",
+    "type": "inject",
+    "z": "0f14a080e4873ed4",
+    "name": "Map",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"red\":\"#ff0000\",\"green\":\"#00ff00\",\"blue\":\"#0000ff\"}",
+    "payloadType": "json",
+    "x": 270,
+    "y": 1400,
+    "wires": [
+      [
+        "19a991ae83992ca4"
+      ]
+    ]
+  },
+  {
+    "id": "946d62c879f99581",
+    "type": "inject",
+    "z": "0f14a080e4873ed4",
+    "name": "Set",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "[2,3,4,4,2,3,3,4,4,5,5,6,6,7,5,32,3,4,5]",
+    "payloadType": "json",
+    "x": 270,
+    "y": 1440,
+    "wires": [
+      [
+        "e0445224bca59839"
+      ]
+    ]
+  },
+  {
+    "id": "6644f2d5d31da07c",
+    "type": "comment",
+    "z": "0f14a080e4873ed4",
+    "name": "Генерация объектов",
+    "info": "",
+    "x": 280,
+    "y": 1200,
+    "wires": []
+  },
+  {
+    "id": "0b43d0b3924f8996",
+    "type": "comment",
+    "z": "0f14a080e4873ed4",
+    "name": "Пример: Перебор различных объектов",
+    "info": "",
+    "x": 600,
+    "y": 1200,
+    "wires": []
+  },
+  {
+    "id": "fcc831daa35f2e6f",
+    "type": "comment",
+    "z": "0f14a080e4873ed4",
+    "name": "Финальный результат",
+    "info": "",
+    "x": 870,
+    "y": 1260,
+    "wires": []
+  },
+  {
+    "id": "cb40acd4c629fedc",
+    "type": "comment",
+    "z": "0f14a080e4873ed4",
+    "name": "Значение loop",
+    "info": "",
+    "x": 860,
+    "y": 1380,
+    "wires": []
+  },
+  {
+    "id": "810bcf360554897c",
+    "type": "junction",
+    "z": "0f14a080e4873ed4",
+    "x": 500,
+    "y": 1420,
+    "wires": [
+      [
+        "74f8f5749683bf93"
+      ]
+    ]
+  },
+  {
+    "id": "a294079411bce064",
+    "type": "junction",
+    "z": "0f14a080e4873ed4",
+    "x": 460,
+    "y": 1240,
+    "wires": [
+      [
+        "bf2fe5d9efd86fac"
+      ]
+    ]
+  },
+  {
+    "id": "6f0ac3a95b7f1eac",
+    "type": "junction",
+    "z": "0f14a080e4873ed4",
+    "x": 460,
+    "y": 1280,
+    "wires": [
+      [
+        "bf2fe5d9efd86fac"
+      ]
+    ]
+  },
+  {
+    "id": "90015d5f9e0f18b6",
+    "type": "junction",
+    "z": "0f14a080e4873ed4",
+    "x": 400,
+    "y": 1440,
+    "wires": [
+      [
+        "bf2fe5d9efd86fac"
+      ]
+    ]
+  },
+  {
+    "id": "f0b52f88377ae5f8",
+    "type": "junction",
+    "z": "0f14a080e4873ed4",
+    "x": 400,
+    "y": 1400,
+    "wires": [
+      [
+        "bf2fe5d9efd86fac"
+      ]
+    ]
+  }
+]

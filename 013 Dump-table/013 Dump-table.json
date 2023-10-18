@@ -1,0 +1,64 @@
+[
+  {
+    "id": "05c08cf11c993857",
+    "type": "luxmsbi-dump-table",
+    "z": "c8601fec211e98b5",
+    "dataSource": "luxmsbi",
+    "schema": "custom",
+    "table": "acc",
+    "csvWithNames": true,
+    "csvDelimiter": "comma",
+    "x": 970,
+    "y": 320,
+    "wires": [
+      [
+        "c3828347a06c117a"
+      ]
+    ]
+  },
+  {
+    "id": "9cff4130af29d19d",
+    "type": "inject",
+    "z": "c8601fec211e98b5",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 720,
+    "y": 320,
+    "wires": [
+      [
+        "05c08cf11c993857"
+      ]
+    ]
+  },
+  {
+    "id": "c3828347a06c117a",
+    "type": "debug",
+    "z": "c8601fec211e98b5",
+    "name": "debug 2",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1200,
+    "y": 320,
+    "wires": []
+  }
+]

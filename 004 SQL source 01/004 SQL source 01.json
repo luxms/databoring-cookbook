@@ -1,0 +1,82 @@
+[
+  {
+    "id": "4273315874e81c4b",
+    "type": "inject",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 200,
+    "y": 800,
+    "wires": [
+      [
+        "814c88df48446d4f"
+      ]
+    ]
+  },
+  {
+    "id": "b01d2e76e24bda6f",
+    "type": "luxmsbi-datagate",
+    "z": "76e7c1fb4648a1eb",
+    "name": "SQL источник",
+    "source": "luxmsbi",
+    "sqlQuery": "select ${msg.number} as nm",
+    "x": 560,
+    "y": 800,
+    "wires": [
+      [
+        "b673b7a9a25e1ee3"
+      ]
+    ]
+  },
+  {
+    "id": "814c88df48446d4f",
+    "type": "function",
+    "z": "76e7c1fb4648a1eb",
+    "name": "",
+    "func": "msg.number = 1;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 800,
+    "wires": [
+      [
+        "b01d2e76e24bda6f"
+      ]
+    ]
+  },
+  {
+    "id": "b673b7a9a25e1ee3",
+    "type": "debug",
+    "z": "76e7c1fb4648a1eb",
+    "name": "debug 3",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 800,
+    "wires": []
+  }
+]

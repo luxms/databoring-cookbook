@@ -1,0 +1,82 @@
+[
+  {
+    "id": "2ecfab620fefda1b",
+    "type": "inject",
+    "z": "ac9082b59e48b8c1",
+    "name": "",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 160,
+    "wires": [
+      [
+        "5d819f45c8b8cb6d"
+      ]
+    ]
+  },
+  {
+    "id": "672aa7adbad75ddc",
+    "type": "debug",
+    "z": "ac9082b59e48b8c1",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "payload",
+    "statusType": "auto",
+    "x": 530,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "5d819f45c8b8cb6d",
+    "type": "function",
+    "z": "ac9082b59e48b8c1",
+    "name": "",
+    "func": "var newmsg={\n  options:{},\n  headers:{},\n  payload:{\"intA\":2, \"intB\":56}\n};\nreturn newmsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 295,
+    "y": 160,
+    "wires": [
+      [
+        "09856af9fd4fb3b5"
+      ]
+    ],
+    "icon": "node-red-contrib-loop/js.png",
+    "l": false
+  },
+  {
+    "id": "09856af9fd4fb3b5",
+    "type": "luxmsbi-soap",
+    "z": "ac9082b59e48b8c1",
+    "name": "",
+    "topic": "",
+    "wsdl": "http://www.dneonline.com/calculator.asmx?wsdl",
+    "method": "Multiply",
+    "auth": "0",
+    "user": "",
+    "pass": "",
+    "key": "",
+    "cert": "",
+    "token": "",
+    "x": 390,
+    "y": 160,
+    "wires": [
+      [
+        "672aa7adbad75ddc"
+      ]
+    ]
+  }
+]

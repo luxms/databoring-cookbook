@@ -1,0 +1,124 @@
+[
+  {
+    "id": "f7e831ce0e8aa88b",
+    "type": "luxmsbi-run-sql",
+    "z": "c8601fec211e98b5",
+    "name": "Выполнить произвольный запрос на сервере",
+    "dataSource": "luxmsbi",
+    "errorToPayload": false,
+    "query": "CALL custom.create_table_foo();",
+    "x": 1000,
+    "y": 1020,
+    "wires": [
+      [
+        "5bd71cca8797416c"
+      ]
+    ]
+  },
+  {
+    "id": "cac9720f6cfc89cb",
+    "type": "inject",
+    "z": "c8601fec211e98b5",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 700,
+    "y": 1020,
+    "wires": [
+      [
+        "f7e831ce0e8aa88b"
+      ]
+    ]
+  },
+  {
+    "id": "b76f3cb26c5a6639",
+    "type": "debug",
+    "z": "c8601fec211e98b5",
+    "name": "debug 3",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1180,
+    "y": 940,
+    "wires": []
+  },
+  {
+    "id": "af301e6e7f07bb18",
+    "type": "luxmsbi-datagate",
+    "z": "c8601fec211e98b5",
+    "name": "SQL источник",
+    "source": "luxmsbi",
+    "chunkSize": "10",
+    "sqlQuery": "SELECT 1;",
+    "x": 1000,
+    "y": 940,
+    "wires": [
+      [
+        "b76f3cb26c5a6639"
+      ]
+    ]
+  },
+  {
+    "id": "c0daeaab708d1b56",
+    "type": "inject",
+    "z": "c8601fec211e98b5",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 800,
+    "y": 940,
+    "wires": [
+      [
+        "af301e6e7f07bb18"
+      ]
+    ]
+  },
+  {
+    "id": "5bd71cca8797416c",
+    "type": "debug",
+    "z": "c8601fec211e98b5",
+    "name": "debug 4",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1300,
+    "y": 1020,
+    "wires": []
+  }
+]

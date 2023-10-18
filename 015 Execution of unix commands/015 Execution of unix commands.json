@@ -1,0 +1,165 @@
+[
+  {
+    "id": "c4edf3aef8f6fdd0",
+    "type": "template",
+    "z": "fdf705dc3f42be68",
+    "name": "file",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "python",
+    "syntax": "mustache",
+    "template": "#!/bin/bash \n\ncd /opt/test\nsource env/bin/activate\npython some_script.py",
+    "output": "str",
+    "x": 570,
+    "y": 320,
+    "wires": [
+      [
+        "8db2f1a0f2becaa4"
+      ]
+    ]
+  },
+  {
+    "id": "8db2f1a0f2becaa4",
+    "type": "file",
+    "z": "fdf705dc3f42be68",
+    "name": "save to file",
+    "filename": "/tmp/script.sh",
+    "appendNewline": true,
+    "createDir": false,
+    "overwriteFile": "true",
+    "encoding": "none",
+    "x": 750,
+    "y": 320,
+    "wires": [
+      [
+        "e93a992ada246576"
+      ]
+    ]
+  },
+  {
+    "id": "e93a992ada246576",
+    "type": "exec",
+    "z": "fdf705dc3f42be68",
+    "command": "chmod u+x /tmp/script.sh",
+    "addpay": false,
+    "append": "",
+    "useSpawn": "true",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "make script.sh file executable",
+    "x": 1010,
+    "y": 320,
+    "wires": [
+      [],
+      [],
+      [
+        "f9188811daacbdf7"
+      ]
+    ]
+  },
+  {
+    "id": "f9188811daacbdf7",
+    "type": "exec",
+    "z": "fdf705dc3f42be68",
+    "command": "bash /tmp/script.sh",
+    "addpay": false,
+    "append": "",
+    "useSpawn": "true",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "execute /script.sh",
+    "x": 1310,
+    "y": 320,
+    "wires": [
+      [
+        "2c4613f6bcb9a520"
+      ],
+      [
+        "1cb60e4a360ebf19"
+      ],
+      [
+        "7ddb38a79527f549"
+      ]
+    ]
+  },
+  {
+    "id": "2c4613f6bcb9a520",
+    "type": "debug",
+    "z": "fdf705dc3f42be68",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1550,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "1cb60e4a360ebf19",
+    "type": "debug",
+    "z": "fdf705dc3f42be68",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1550,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "7ddb38a79527f549",
+    "type": "debug",
+    "z": "fdf705dc3f42be68",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1550,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "79a24d5931822f82",
+    "type": "inject",
+    "z": "fdf705dc3f42be68",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 380,
+    "y": 320,
+    "wires": [
+      [
+        "c4edf3aef8f6fdd0"
+      ]
+    ]
+  }
+]

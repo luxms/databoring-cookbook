@@ -1,0 +1,70 @@
+[
+  {
+    "id": "7d59c0c9.d4e0c",
+    "type": "luxmsbi-http-in",
+    "z": "d0f4f957a7170343",
+    "name": "Load",
+    "url": "load",
+    "urlAuth":"",
+    "method": "get",
+    "upload": false,
+    "username":"",
+    "password":"",
+    "x": 830,
+    "y": 280,
+    "wires": [
+      [
+        "3bc1ed68bd22154e"
+      ]
+    ]
+  },
+  {
+    "id": "cbbf421a.e298a",
+    "type": "http response",
+    "z": "d0f4f957a7170343",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1290,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "3dacbdcdb7611f32",
+    "type": "template",
+    "z": "d0f4f957a7170343",
+    "name": "",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "<!DOCTYPE html>\n<html>\n       <head>\n     <title>Вгрузка завершена</title>   \n    <style>\n{{{css}}}\n</style>\n   </head>\n   <body>\n       <div>\n           <text-info>\n               \n\n      <p>Данные вгружены</p> <hr>\n    <a href=\"/databoring/start\" class=\"button-y\">В начало</a>\n                 </text-info>\n      </div>\n      \n       <copyright>\n      <a class=\"fusion-no-lightbox\" href=\"https://luxmsbi.com/\" target=\"_self\"><img src=\"https://luxmsbi.com/wp-content/uploads/2020/12/LogoBI_colour_2-e1617718587530.png\" data-orig-src=\"https://luxmsbi.com/wp-content/uploads/2020/12/LogoBI_colour_2-e1617718587530.png\" class=\"img-responsive wp-image-4839 lazyloaded\" width=\"256\" height=\"45\"></a>\n  </a>\n</copyright>\n\n   </body>\n</html>",
+    "output": "str",
+    "x": 1120,
+    "y": 280,
+    "wires": [
+      [
+        "cbbf421a.e298a"
+      ]
+    ]
+  },
+  {
+    "id": "3bc1ed68bd22154e",
+    "type": "template",
+    "z": "d0f4f957a7170343",
+    "name": "css",
+    "field": "css",
+    "fieldType": "msg",
+    "format": "css",
+    "syntax": "mustache",
+    "template": "div {\nheight: 200px;\nposition: absolute;\nwidth: 480px;\nheight: 200px;\ntop: 40%;\nleft: 40%;\n\n/* background dash */\n\nbackground: #FFFFFF;\nbox-shadow: 0px 10px 20px rgba(79, 79, 155, 0.05), 0px 2px 6px rgba(79, 79, 155, 0.05), 0px 0px 1px rgba(79, 79, 155, 0.05);\nborder-radius: 8px;\n\n}\n\np {\n    font-family: Roboto, Arial;\n    text-align:  center;\n    font-size: large;\n} \ntext-info{\nposition: absolute;\nwidth: 438px;\nheight: 225px;\ntop: 5%;\nleft: 5%;\n}\n\nbody{\n    background-color: #F2F2F8;\n   }\n\n/* CSS */\n.button-y {\n  background-color: #5FB138;\n  border-radius: 8px;\n  border-style: none;\n  box-sizing: border-box;\n  color: #FFFFFF;\n  cursor: pointer;\n  display: inline-block;\n  font-family: Roboto, Arial;\n  font-size: 16px;\n  font-weight: 600;\n  width: 216px;\n  height: 48px;\n  line-height: 20px;\n  list-style: none;\n  margin: 0;\n  outline: none;\n  padding: 14px 16px;\n  position: relative;\n  text-align: center;\n  text-decoration: none;\n  transition: color 100ms;\n  vertical-align: baseline;\n  user-select: none;\n  position: absolute;\n  top: 40%;\n  left: 25%;\n  -webkit-user-select: none;\n  touch-action: manipulation;\n}\n\n.button-y:hover {\n    opacity: 0.7;\n},\n.button-y:focus {\n  background-color: #F082AC;\n}\n\ncopyright {\n  display:block;\n  margin-top: 100px;\n  text-align: center;\n  font-family: Helvetica, Arial, sans-serif;\n  font-size: 12px;\n  font-weight: bold;\n  text-transform: uppercase;\n  position: absolute;\n  top: 80%;\n  left: 44%;\n}\ncopyright a{\n  text-decoration: none;\n  color: #EE4E44;\n}",
+    "output": "str",
+    "x": 970,
+    "y": 280,
+    "wires": [
+      [
+        "3dacbdcdb7611f32"
+      ]
+    ]
+  }
+]
