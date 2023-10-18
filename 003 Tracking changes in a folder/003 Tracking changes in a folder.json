@@ -1,0 +1,33 @@
+[
+  {
+    "id": "896cdeba5252eb89",
+    "type": "watch",
+    "z": "c8601fec211e98b5",
+    "name": "",
+    "files": "/tmp/Data.xlsx",
+    "recursive": "",
+    "x": 830,
+    "y": 380,
+    "wires": [
+      [
+        "44feeca4a6dce129"
+      ]
+    ]
+  },
+  {
+    "id": "44feeca4a6dce129",
+    "type": "debug",
+    "z": "c8601fec211e98b5",
+    "name": "debug 2",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1020,
+    "y": 380,
+    "wires": []
+  }
+]
