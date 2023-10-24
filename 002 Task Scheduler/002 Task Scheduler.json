@@ -1,48 +1,48 @@
 [
-  {
-    "id": "1af55c967466699a",
-    "type": "luxmsbi-cron",
-    "z": "381770c450acae55",
-    "pattern": "16 9,11,13,15,17,19 * * *",
-    "name": "Планировщик задач",
-    "x": 820,
-    "y": 640,
-    "wires": [
-      [
-        "fb7d5128f39fbeda"
-      ]
-    ]
-  },
-  {
-    "id": "b614827707b08233",
-    "type": "debug",
-    "z": "381770c450acae55",
-    "name": "debug 6",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 1220,
-    "y": 640,
-    "wires": []
-  },
-  {
-    "id": "fb7d5128f39fbeda",
-    "type": "luxmsbi-datagate",
-    "z": "381770c450acae55",
-    "name": "SQL источник",
-    "source": "luxmsbi",
-    "chunkSize": "",
-    "sqlQuery": "SELECT 1",
-    "x": 1040,
-    "y": 640,
-    "wires": [
-      [
-        "b614827707b08233"
-      ]
-    ]
-  }
+    {
+        "id": "1af55c967466699a",
+        "type": "luxmsbi-cron",
+        "z": "13c6810114ebb53b",
+        "pattern": "16 9,11,13,15,17,19 * * *",
+        "name": "Планировщик задач",
+        "x": 700,
+        "y": 900,
+        "wires": [
+            [
+                "fb7d5128f39fbeda"
+            ]
+        ]
+    },
+    {
+        "id": "b614827707b08233",
+        "type": "debug",
+        "z": "13c6810114ebb53b",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "fb7d5128f39fbeda",
+        "type": "luxmsbi-datagate",
+        "z": "13c6810114ebb53b",
+        "name": "SQL источник",
+        "source": "luxmsbi",
+        "chunkSize": "",
+        "sqlQuery": "SELECT 1 as number",
+        "x": 920,
+        "y": 900,
+        "wires": [
+            [
+                "b614827707b08233"
+            ]
+        ]
+    }
 ]

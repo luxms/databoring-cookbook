@@ -1,74 +1,98 @@
 [
-  {
-    "id": "290255d2a4b25830",
-    "type": "inject",
-    "z": "c8601fec211e98b5",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 720,
-    "y": 200,
-    "wires": [
-      [
-        "4bef2c2673b61199"
-      ]
-    ]
-  },
-  {
-    "id": "4bef2c2673b61199",
-    "type": "luxmsbi-import-data",
-    "z": "c8601fec211e98b5",
-    "name": "Импорт файлов",
-    "paramsFromFlow": false,
-    "fileType": "xls",
-    "destinationIdent": "luxmsbi",
-    "dataSourceFilePath": "/tmp/Data.xlsx",
-    "headerRow": "1",
-    "firstDataRow": "2",
-    "sheetNumbers": "",
-    "schemaName": "custom_2",
-    "tableName": "",
-    "mode": "drop",
-    "tryToCast": true,
-    "dropFileOnComplete": false,
-    "csvWithNames": true,
-    "csvDelimiter": "comma",
-    "x": 950,
-    "y": 200,
-    "wires": [
-      [
-        "2d51e0e1d6b78f05"
-      ]
-    ]
-  },
-  {
-    "id": "2d51e0e1d6b78f05",
-    "type": "debug",
-    "z": "c8601fec211e98b5",
-    "name": "debug 1",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 1160,
-    "y": 200,
-    "wires": []
-  }
+    {
+        "id": "4fb494c16b0e6568",
+        "type": "luxmsbi-transfer-data",
+        "z": "273fdbe6b5d77af3",
+        "name": "",
+        "retryCount": 1,
+        "retryDelay": 5000,
+        "sourceType": "xls",
+        "sourceSqlConnIdent": "",
+        "sourceSqlQuery": "",
+        "sourceXlsFilePath": "file:///tmp/data.xlsx",
+        "sourceXlsHeaderRow": "1,1",
+        "sourceXlsFirstDataRow": "2, 2 ",
+        "sourceXlsSheetNumbers": "1, 2",
+        "sourceXlsStreamProcessing": false,
+        "sourceXlsDropFileOnComplete": false,
+        "sourceCsvFileEncoding": "utf-8",
+        "sourceCsvFilePath": "",
+        "sourceCsvWithNames": true,
+        "sourceCsvDelimiter": "comma",
+        "sourceCsvZipped": false,
+        "sourceCsvDropFileOnComplete": false,
+        "sourceDbfFileEncoding": "utf-8",
+        "sourceDbfFilePath": "",
+        "sourceDbfDropFileOnComplete": false,
+        "sourceQvdFilePath": "",
+        "sourceQvdDropFileOnComplete": false,
+        "sourceAvroFilePath": "",
+        "sourceAvroDropFileOnComplete": false,
+        "sourceParquetFilePath": "",
+        "sourceParquetDropFileOnComplete": false,
+        "destinationType": "sql",
+        "destinationSqlConnIdent": "luxmsbi",
+        "destinationSqlSchemaName": "custom",
+        "destinationSqlTableName": "data, sex",
+        "destinationSqlMode": "append",
+        "destinationSqlTryToCast": false,
+        "destinationSqlChunkSize": 1000,
+        "destinationCsvTargetFolderPath": "",
+        "destinationCsvWithNames": true,
+        "destinationCsvDelimiter": "comma",
+        "destinationCsvZipped": false,
+        "allowed": "sql_sql,sql_csv,xls_sql,csv_sql,dbf_sql",
+        "x": 1010,
+        "y": 140,
+        "wires": [
+            [
+                "ac0a63ba0c34226b"
+            ]
+        ]
+    },
+    {
+        "id": "f5aa6d91d52f105e",
+        "type": "inject",
+        "z": "273fdbe6b5d77af3",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 840,
+        "y": 140,
+        "wires": [
+            [
+                "4fb494c16b0e6568"
+            ]
+        ]
+    },
+    {
+        "id": "ac0a63ba0c34226b",
+        "type": "debug",
+        "z": "273fdbe6b5d77af3",
+        "name": "debug 85",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 140,
+        "wires": []
+    }
 ]

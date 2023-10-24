@@ -1,84 +1,119 @@
 [
-  {
-    "id": "5c084222b861db1a",
-    "type": "inject",
-    "z": "76a7fd330e958650",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 200,
-    "y": 220,
-    "wires": [
-      [
-        "37515d15c02698d5"
-      ]
-    ]
-  },
-  {
-    "id": "37515d15c02698d5",
-    "type": "luxmsbi-dump-sql",
-    "z": "76a7fd330e958650",
-    "name": "SQL запрос в файл",
-    "dataSource": "luxmsbi",
-    "sqlQuery": "SELECT t.day::date as dt, random() * 100 + 44 AS plan,  random() * 100 AS fakt\nFROM   generate_series(timestamp '2022-05-01'\n                     , timestamp '2022-10-30'\n                     , interval  '1 day') AS t(day)\norder by t.day::date",
-    "csvWithNames": true,
-    "csvDelimiter": "comma",
-    "x": 420,
-    "y": 220,
-    "wires": [
-      [
-        "39292be271e8c45f"
-      ]
-    ]
-  },
-  {
-    "id": "39292be271e8c45f",
-    "type": "function",
-    "z": "76a7fd330e958650",
-    "name": "function 6",
-    "func": "flow.set(\"path\", msg.payload.sink)\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 620,
-    "y": 220,
-    "wires": [
-      [
-        "d8940bf995280344"
-      ]
-    ]
-  },
-  {
-    "id": "d8940bf995280344",
-    "type": "debug",
-    "z": "76a7fd330e958650",
-    "name": "debug 38",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "payload",
-    "targetType": "msg",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 780,
-    "y": 220,
-    "wires": []
-  }
+    {
+        "id": "5c084222b861db1a",
+        "type": "inject",
+        "z": "d464bbd4e6998b11",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 660,
+        "y": 700,
+        "wires": [
+            [
+                "d6f7621cf245a155"
+            ]
+        ]
+    },
+    {
+        "id": "d8940bf995280344",
+        "type": "debug",
+        "z": "d464bbd4e6998b11",
+        "name": "debug 38",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1240,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "d6f7621cf245a155",
+        "type": "luxmsbi-transfer-data",
+        "z": "d464bbd4e6998b11",
+        "name": "SQL запрос в файл",
+        "retryCount": 1,
+        "retryDelay": 5000,
+        "sourceType": "sql",
+        "sourceSqlConnIdent": "luxmsbi",
+        "sourceSqlQuery": "SELECT t.day::date as dt, random() * 100 + 44 AS plan,  random() * 100 AS fakt\nFROM   generate_series(timestamp '2022-05-01'\n                     , timestamp '2022-10-30'\n                     , interval  '1 day') AS t(day)\norder by t.day::date",
+        "sourceXlsFilePath": "",
+        "sourceXlsHeaderRow": "",
+        "sourceXlsFirstDataRow": "",
+        "sourceXlsSheetNumbers": "",
+        "sourceXlsStreamProcessing": false,
+        "sourceXlsDropFileOnComplete": false,
+        "sourceCsvFileEncoding": "utf-8",
+        "sourceCsvFilePath": "",
+        "sourceCsvWithNames": true,
+        "sourceCsvDelimiter": "comma",
+        "sourceCsvZipped": false,
+        "sourceCsvDropFileOnComplete": false,
+        "sourceDbfFileEncoding": "utf-8",
+        "sourceDbfFilePath": "",
+        "sourceDbfDropFileOnComplete": false,
+        "sourceQvdFilePath": "",
+        "sourceQvdDropFileOnComplete": false,
+        "sourceAvroFilePath": "",
+        "sourceAvroDropFileOnComplete": false,
+        "sourceParquetFilePath": "",
+        "sourceParquetDropFileOnComplete": false,
+        "destinationType": "csv",
+        "destinationSqlConnIdent": "",
+        "destinationSqlSchemaName": "",
+        "destinationSqlTableName": "",
+        "destinationSqlMode": "truncate",
+        "destinationSqlTryToCast": true,
+        "destinationSqlChunkSize": 1000,
+        "destinationCsvTargetFolderPath": "",
+        "destinationCsvWithNames": true,
+        "destinationCsvDelimiter": "comma",
+        "destinationCsvZipped": false,
+        "allowed": "sql_sql,sql_csv,xls_sql,csv_sql,dbf_sql,qvd_sql,avro_sql,parquet_sql",
+        "x": 860,
+        "y": 700,
+        "wires": [
+            [
+                "64327dad80ab6cd0"
+            ]
+        ]
+    },
+    {
+        "id": "64327dad80ab6cd0",
+        "type": "function",
+        "z": "d464bbd4e6998b11",
+        "name": "function 85",
+        "func": "flow.set(\"path\", msg.payload.sink)\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 700,
+        "wires": [
+            [
+                "d8940bf995280344"
+            ]
+        ]
+    }
 ]

@@ -1,33 +1,33 @@
 [
-  {
-    "id": "896cdeba5252eb89",
-    "type": "watch",
-    "z": "c8601fec211e98b5",
-    "name": "",
-    "files": "/tmp/Data.xlsx",
-    "recursive": "",
-    "x": 830,
-    "y": 380,
-    "wires": [
-      [
-        "44feeca4a6dce129"
-      ]
-    ]
-  },
-  {
-    "id": "44feeca4a6dce129",
-    "type": "debug",
-    "z": "c8601fec211e98b5",
-    "name": "debug 2",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 1020,
-    "y": 380,
-    "wires": []
-  }
+    {
+        "id": "cc44ccc83450b0dc",
+        "type": "luxmsbi-watch-file",
+        "z": "13c6810114ebb53b",
+        "name": "",
+        "folder": "/tmp/",
+        "files": "Data.xlsx",
+        "x": 720,
+        "y": 1080,
+        "wires": [
+            [
+                "6640e8fba3080d8d"
+            ]
+        ]
+    },
+    {
+        "id": "6640e8fba3080d8d",
+        "type": "debug",
+        "z": "13c6810114ebb53b",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 1080,
+        "wires": []
+    }
 ]
