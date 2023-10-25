@@ -1,329 +1,356 @@
 [
   {
-    "id": "edaa4867e9232fb5",
-    "type": "watch",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "files": "/tmp",
-    "recursive": "",
-    "x": 130,
-    "y": 200,
-    "wires": [
-      [
-        "a1c0a3413d359be5"
-      ]
-    ]
-  },
-  {
-    "id": "faedb4aedfe50d79",
-    "type": "change",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "rules": [
-      {
-        "p": "arrayd",
-        "t": "set",
-        "pt": "msg",
-        "to": "arr",
-        "tot": "flow"
-      },
-      {
-        "p": "arr",
-        "t": "set",
-        "pt": "flow",
-        "to": "$append(msg.arrayd, [msg.payload])\t",
-        "tot": "jsonata"
-      },
-      {
-        "p": "payload",
-        "t": "set",
-        "pt": "msg",
-        "to": "arr",
-        "tot": "flow"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 500,
-    "y": 200,
-    "wires": [
-      [
-        "5bc3693641c82e65"
-      ]
-    ]
-  },
-  {
-    "id": "caa7079c4d828280",
-    "type": "debug",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 790,
-    "y": 200,
-    "wires": []
-  },
-  {
-    "id": "a1c0a3413d359be5",
-    "type": "switch",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "property": "payload",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "cont",
-        "v": ".xlsx",
-        "vt": "str"
-      }
-    ],
-    "checkall": "true",
-    "repair": false,
-    "outputs": 1,
-    "x": 290,
-    "y": 200,
-    "wires": [
-      [
-        "faedb4aedfe50d79"
-      ]
-    ]
-  },
-  {
-    "id": "5bc3693641c82e65",
-    "type": "loop",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "kind": "enum",
-    "count": "",
-    "initial": "",
-    "step": "",
-    "condition": "",
-    "conditionType": "js",
-    "when": "before",
-    "enumeration": "payload",
-    "enumerationType": "msg",
-    "limit": "",
-    "loopPayload": "loop-index",
-    "finalPayload": "final-orig",
-    "x": 655,
-    "y": 200,
-    "wires": [
-      [
-        "caa7079c4d828280"
+      "id": "faedb4aedfe50d79",
+      "type": "change",
+      "z": "406c82ff69485911",
+      "name": "",
+      "rules": [
+          {
+              "p": "arrayd",
+              "t": "set",
+              "pt": "msg",
+              "to": "arr",
+              "tot": "flow"
+          },
+          {
+              "p": "arr",
+              "t": "set",
+              "pt": "flow",
+              "to": "$append(msg.arrayd, [msg.payload])\t",
+              "tot": "jsonata"
+          },
+          {
+              "p": "payload",
+              "t": "set",
+              "pt": "msg",
+              "to": "arr",
+              "tot": "flow"
+          }
       ],
-      [
-        "a3dc7a1b5bbec610"
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 3260,
+      "y": 800,
+      "wires": [
+          [
+              "5bc3693641c82e65"
+          ]
       ]
-    ],
-    "l": false
   },
   {
-    "id": "a3dc7a1b5bbec610",
-    "type": "change",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "rules": [
-      {
-        "t": "set",
-        "p": "payload",
-        "pt": "msg",
-        "to": "$type(msg.loop.key) != \"undefined\" ? msg.loop.value != '' ?\tmsg.loop.key & \": \" & msg.loop.value :\tmsg.loop.value",
-        "tot": "jsonata"
-      },
-      {
-        "t": "set",
-        "p": "destinationIdent",
-        "pt": "msg",
-        "to": "luxmsbi",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "shemaName",
-        "pt": "msg",
-        "to": "custom",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "tableName",
-        "pt": "msg",
-        "to": "$replace($replace(msg.loop.value, '/tmp/', ''), '.xlsx', '')\t",
-        "tot": "jsonata"
-      },
-      {
-        "t": "set",
-        "p": "sheetNumber",
-        "pt": "msg",
-        "to": "1",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "dataSourceFilePath",
-        "pt": "msg",
-        "to": "msg.loop.value",
-        "tot": "jsonata"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 385,
-    "y": 300,
-    "wires": [
-      [
-        "f8c6f57fad1c8b9c"
+      "id": "a1c0a3413d359be5",
+      "type": "switch",
+      "z": "406c82ff69485911",
+      "name": "",
+      "property": "payload",
+      "propertyType": "msg",
+      "rules": [
+          {
+              "t": "cont",
+              "v": ".xlsx",
+              "vt": "str"
+          }
+      ],
+      "checkall": "true",
+      "repair": false,
+      "outputs": 1,
+      "x": 3090,
+      "y": 800,
+      "wires": [
+          [
+              "faedb4aedfe50d79"
+          ]
       ]
-    ],
-    "l": false
   },
   {
-    "id": "f8c6f57fad1c8b9c",
-    "type": "function",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "func": "const excel = global.get('EXCEL');\nconst workbook = new excel.Workbook();\n\nasync function readExcel(filePath, sheetName) {\n  await workbook.xlsx.readFile(filePath);\n  const worksheet = workbook.getWorksheet(sheetName);\n\n  let headerName = [];\n  let headerRow = 0;\n\n  worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {\n    let readRow = [];\n\n    row.eachCell({ includeEmpty: true }, function (cell) {\n      readRow.push(cell.value);\n    });\n\n    if (readRow.every(value => typeof value === 'string')) {\n      headerName.push(readRow);\n      headerRow = rowNumber;\n    }\n  });\n\n  return {\n    headerRow,\n    firstDataRow: headerRow + 1,\n  };\n}\n\nconst data = readExcel(msg.dataSourceFilePath, msg.sheetName);\nmsg.headerRow = data.headerRow;\nmsg.firstDataRow = data.firstDataRow;\nreturn msg;\n",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 455,
-    "y": 300,
-    "wires": [
-      [
-        "0966614525f886cd"
+      "id": "5bc3693641c82e65",
+      "type": "loop",
+      "z": "406c82ff69485911",
+      "name": "",
+      "kind": "enum",
+      "count": "",
+      "initial": "",
+      "step": "",
+      "condition": "",
+      "conditionType": "js",
+      "when": "before",
+      "enumeration": "payload",
+      "enumerationType": "msg",
+      "limit": "",
+      "loopPayload": "loop-index",
+      "finalPayload": "final-orig",
+      "x": 3425,
+      "y": 800,
+      "wires": [
+          [
+              "1d053e98205a18cc"
+          ],
+          [
+              "1f74c4296bee9e4f"
+          ]
+      ],
+      "l": false
+  },
+  {
+      "id": "f8c6f57fad1c8b9c",
+      "type": "function",
+      "z": "406c82ff69485911",
+      "name": "",
+      "func": "const e = global.get('EXCEL');\nconst isString = (currentValue) => typeof currentValue == \"string\";\n\nconst workbook = new e.Workbook();\nawait workbook.xlsx.readFile(msg.sourceXlsFilePath);\nconst worksheet = workbook.getWorksheet(msg.sheetName);\n\n\nlet headerName = new Array();\nlet headerRow = 0;\n\nworksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {\n\n  let readRow = new Array()\n\n  row.eachCell({ includeEmpty: true }, function (cell, colNumber) {\n    readRow.push(cell.value);\n  });\n\n  if (readRow.every(isString)) {\n    headerName.push(readRow);\n    headerRow = rowNumber;\n  };\n});\n\nmsg.payload = {};\n\nmsg.sourceXlsHeaderRow = headerRow;\nmsg.datasourceXlsFirstDataRow = headerRow + 1;\nmsg.sourceXlsFilePath = 'file://' + msg.sourceXlsFilePath;\n\n\nreturn msg;",
+      "outputs": 1,
+      "timeout": "",
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 3285,
+      "y": 900,
+      "wires": [
+          [
+              "ef6bb25b67453bac"
+          ]
+      ],
+      "icon": "loop/js.png",
+      "l": false
+  },
+  {
+      "id": "d7716f23a589ea06",
+      "type": "function",
+      "z": "406c82ff69485911",
+      "name": "function 2",
+      "func": "var array = flow.get('arr');\nvar newArray = array.filter((value) => value != msg.filename);\nflow.set('arr', newArray)\nreturn msg;",
+      "outputs": 1,
+      "timeout": "",
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 3575,
+      "y": 900,
+      "wires": [
+          [
+              "5bc3693641c82e65",
+              "cac7361ceaf2a495"
+          ]
+      ],
+      "icon": "node-red/js.png",
+      "l": false
+  },
+  {
+      "id": "20361ba98101ce07",
+      "type": "catch",
+      "z": "406c82ff69485911",
+      "name": "",
+      "scope": [
+          "0966614525f886cd"
+      ],
+      "uncaught": false,
+      "x": 2930,
+      "y": 720,
+      "wires": [
+          [
+              "35bcc69eab0e065f"
+          ]
       ]
-    ],
-    "l": false
   },
   {
-    "id": "0966614525f886cd",
-    "type": "luxmsbi-import-data",
-    "z": "76e7c1fb4648a1eb",
-    "name": "Импорт файлов",
-    "paramsFromFlow": true,
-    "fileType": "xls",
-    "destinationIdent": " ",
-    "dataSourceFilePath": " ",
-    "headerRow": "",
-    "firstDataRow": "",
-    "sheetNumbers": "",
-    "schemaName": "",
-    "tableName": "",
-    "mode": "drop",
-    "tryToCast": true,
-    "dropFileOnComplete": false,
-    "csvWithNames": true,
-    "csvDelimiter": "comma",
-    "x": 610,
-    "y": 300,
-    "wires": [
-      [
-        "d145ad7570b8be96",
-        "d7716f23a589ea06"
+      "id": "35bcc69eab0e065f",
+      "type": "function",
+      "z": "406c82ff69485911",
+      "name": "clear arr",
+      "func": "var array = flow.get('arr');\nvar newArray = array.filter((value) => value != msg.filename);\nflow.set('arr', newArray)\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 3080,
+      "y": 720,
+      "wires": [
+          [
+              "29ba545315500f56"
+          ]
       ]
-    ]
   },
   {
-    "id": "d7716f23a589ea06",
-    "type": "function",
-    "z": "76e7c1fb4648a1eb",
-    "name": "function 2",
-    "func": "var array = flow.get('arr');\nvar newArray = array.filter((value) => value != msg.filename);\nflow.set('arr', newArray)\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 785,
-    "y": 300,
-    "wires": [
-      [
-        "5bc3693641c82e65"
+      "id": "04cf05f851d5c0ab",
+      "type": "luxmsbi-watch-file",
+      "z": "406c82ff69485911",
+      "name": "",
+      "folder": "/tmp",
+      "files": "",
+      "x": 2940,
+      "y": 800,
+      "wires": [
+          [
+              "a1c0a3413d359be5"
+          ]
       ]
-    ],
-    "l": false
   },
   {
-    "id": "d145ad7570b8be96",
-    "type": "debug",
-    "z": "76e7c1fb4648a1eb",
-    "name": "debug 63",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 840,
-    "y": 360,
-    "wires": []
+      "id": "1f74c4296bee9e4f",
+      "type": "change",
+      "z": "406c82ff69485911",
+      "name": "",
+      "rules": [
+          {
+              "t": "set",
+              "p": "payload",
+              "pt": "msg",
+              "to": "$type(msg.loop.key) != \"undefined\" ? msg.loop.value != '' ?\tmsg.loop.key & \": \" & msg.loop.value :\tmsg.loop.value",
+              "tot": "jsonata"
+          },
+          {
+              "t": "set",
+              "p": "destinationSqlConnIdent",
+              "pt": "msg",
+              "to": "luxmsbi",
+              "tot": "str"
+          },
+          {
+              "t": "set",
+              "p": "destinationSqlSchemaName",
+              "pt": "msg",
+              "to": "custom",
+              "tot": "str"
+          },
+          {
+              "t": "set",
+              "p": "destinationSqlTableName",
+              "pt": "msg",
+              "to": "$replace($replace(msg.loop.value, '/tmp/', ''), '.xlsx', '')\t",
+              "tot": "jsonata"
+          },
+          {
+              "t": "set",
+              "p": "sourceXlsSheetNumbers",
+              "pt": "msg",
+              "to": "1",
+              "tot": "str"
+          },
+          {
+              "t": "set",
+              "p": "sourceXlsFilePath",
+              "pt": "msg",
+              "to": "msg.loop.value",
+              "tot": "jsonata"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 3215,
+      "y": 900,
+      "wires": [
+          [
+              "f8c6f57fad1c8b9c"
+          ]
+      ],
+      "l": false
   },
   {
-    "id": "20361ba98101ce07",
-    "type": "catch",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "scope": [
-      "0966614525f886cd"
-    ],
-    "uncaught": false,
-    "x": 140,
-    "y": 120,
-    "wires": [
-      [
-        "35bcc69eab0e065f"
+      "id": "ef6bb25b67453bac",
+      "type": "luxmsbi-transfer-data",
+      "z": "406c82ff69485911",
+      "name": "Перенос данных",
+      "retryCount": 1,
+      "retryDelay": 5000,
+      "sourceType": "xls",
+      "sourceSqlConnIdent": "",
+      "sourceSqlQuery": "",
+      "sourceXlsFilePath": "",
+      "sourceXlsHeaderRow": "",
+      "sourceXlsFirstDataRow": "",
+      "sourceXlsSheetNumbers": "",
+      "sourceXlsStreamProcessing": false,
+      "sourceXlsDropFileOnComplete": false,
+      "sourceCsvFileEncoding": "utf-8",
+      "sourceCsvFilePath": "",
+      "sourceCsvWithNames": true,
+      "sourceCsvDelimiter": "comma",
+      "sourceCsvZipped": false,
+      "sourceCsvDropFileOnComplete": false,
+      "sourceDbfFileEncoding": "utf-8",
+      "sourceDbfFilePath": "",
+      "sourceDbfDropFileOnComplete": false,
+      "sourceQvdFilePath": "",
+      "sourceQvdDropFileOnComplete": false,
+      "sourceAvroFilePath": "",
+      "sourceAvroDropFileOnComplete": false,
+      "sourceParquetFilePath": "",
+      "sourceParquetDropFileOnComplete": false,
+      "destinationType": "sql",
+      "destinationSqlConnIdent": "",
+      "destinationSqlSchemaName": "",
+      "destinationSqlTableName": "",
+      "destinationSqlMode": "truncate",
+      "destinationSqlTryToCast": false,
+      "destinationSqlChunkSize": 1000,
+      "destinationCsvTargetFolderPath": "",
+      "destinationCsvWithNames": true,
+      "destinationCsvDelimiter": "comma",
+      "destinationCsvZipped": false,
+      "allowed": "sql_sql,sql_csv,xls_sql,csv_sql,dbf_sql,qvd_sql,avro_sql,parquet_sql",
+      "x": 3430,
+      "y": 900,
+      "wires": [
+          [
+              "d7716f23a589ea06"
+          ]
       ]
-    ]
   },
   {
-    "id": "35bcc69eab0e065f",
-    "type": "function",
-    "z": "76e7c1fb4648a1eb",
-    "name": "clear arr",
-    "func": "var array = flow.get('arr');\nvar newArray = array.filter((value) => value != msg.filename);\nflow.set('arr', newArray)\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 300,
-    "y": 120,
-    "wires": [
-      [
-        "1de84353c116d31f"
-      ]
-    ]
+      "id": "29ba545315500f56",
+      "type": "debug",
+      "z": "406c82ff69485911",
+      "name": "debug 85",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 3240,
+      "y": 720,
+      "wires": []
   },
   {
-    "id": "1de84353c116d31f",
-    "type": "debug",
-    "z": "76e7c1fb4648a1eb",
-    "name": "",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 450,
-    "y": 120,
-    "wires": []
+      "id": "cac7361ceaf2a495",
+      "type": "debug",
+      "z": "406c82ff69485911",
+      "name": "debug 86",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 3700,
+      "y": 920,
+      "wires": []
+  },
+  {
+      "id": "1d053e98205a18cc",
+      "type": "debug",
+      "z": "406c82ff69485911",
+      "name": "debug 87",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 3580,
+      "y": 780,
+      "wires": []
   }
 ]
