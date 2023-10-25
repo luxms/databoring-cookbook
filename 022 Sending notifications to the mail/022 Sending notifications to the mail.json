@@ -1,0 +1,105 @@
+[
+    {
+        "id": "517cb854fd4021e8",
+        "type": "inject",
+        "z": "9807f1d4684798f3",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 520,
+        "y": 300,
+        "wires": [
+            [
+                "9f79e859f276a6de"
+            ]
+        ]
+    },
+    {
+        "id": "9f79e859f276a6de",
+        "type": "luxmsbi-datagate",
+        "z": "9807f1d4684798f3",
+        "name": "",
+        "source": "luxmsbi",
+        "chunkSize": "",
+        "sqlQuery": "SELECT 'Luxms Data Boring 1' AS subject\n\t,'user1@mail.com' as from \n\t,'user2@mail.com' AS to\n\t,'«I sent you data, check it out. 📩⬆️' as body\n\nUNION ALL\n\nSELECT 'Luxms Data Boring 2' AS subject\n\t,'user1@mail.com' as from \n\t,'user3@mail.com' AS to\n\t,'«I sent you information about docs check it out. 📩⬆️' as body\n",
+        "x": 710,
+        "y": 300,
+        "wires": [
+            [
+                "bbaa2ef07e1094de",
+                "be250bf45b0c84ea"
+            ]
+        ]
+    },
+    {
+        "id": "bbaa2ef07e1094de",
+        "type": "delay",
+        "z": "9807f1d4684798f3",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 910,
+        "y": 300,
+        "wires": [
+            [
+                "70608726353c2f3a"
+            ]
+        ]
+    },
+    {
+        "id": "70608726353c2f3a",
+        "type": "Send Email",
+        "z": "9807f1d4684798f3",
+        "from": "",
+        "fromName": "",
+        "subject": " ",
+        "to": "",
+        "cc": "",
+        "body": "",
+        "attachments": [],
+        "x": 1100,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "be250bf45b0c84ea",
+        "type": "debug",
+        "z": "9807f1d4684798f3",
+        "name": "debug 1010",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 240,
+        "wires": []
+    }
+]
